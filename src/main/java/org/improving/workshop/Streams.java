@@ -26,7 +26,7 @@ public class Streams {
     // data demo input topics & serdes //
     /////////////////////////////////////
 
-    // addresses
+    // addressesÏÏ`
     public static final String TOPIC_DATA_DEMO_ADDRESSES = "data-demo-addresses";
     public static final JsonSerde<Address> SERDE_ADDRESS_JSON = new JsonSerde<>(Address.class);
     // artists
@@ -67,20 +67,20 @@ public class Streams {
 
         // Where to find Kafka broker(s).
         // LOCAL
-        // streamsConfiguration.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:19092,localhost:29092,localhost:39092");
+        streamsConfiguration.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:19092,localhost:29092,localhost:39092");
 
-        // CONFLUENT CLOUD -- comment the below configurations out if running locally
-        // TODO - WORKSHOP ATTENDEES UPDATE WITH PROVIDED BOOTSTRAP SERVER
-        streamsConfiguration.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "pkc-mg1wx.us-east-2.aws.confluent.cloud:9092");
-        // TODO - WORKSHOP ATTENDEES UPDATE WITH PROVIDED API KEY & SECRET
-        streamsConfiguration.put("sasl.jaas.config", "org.apache.kafka.common.security.plain.PlainLoginModule required username='**redacted**' password='**redacted**';");
-        streamsConfiguration.put(StreamsConfig.SECURITY_PROTOCOL_CONFIG, "SASL_SSL");
-        streamsConfiguration.put("sasl.mechanism", "PLAIN");
+//        // CONFLUENT CLOUD -- comment the below configurations out if running locally
+//        // TODO - WORKSHOP ATTENDEES UPDATE WITH PROVIDED BOOTSTRAP SERVER
+//        streamsConfiguration.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "pkc-mg1wx.us-east-2.aws.confluent.cloud:9092");
+//        // TODO - WORKSHOP ATTENDEES UPDATE WITH PROVIDED API KEY & SECRET
+//        streamsConfiguration.put("sasl.jaas.config", "org.apache.kafka.common.security.plain.PlainLoginModule required username='**redacted**' password='**redacted**';");
+//        streamsConfiguration.put(StreamsConfig.SECURITY_PROTOCOL_CONFIG, "SASL_SSL");
+//        streamsConfiguration.put("sasl.mechanism", "PLAIN");
 
 
         // Specify default (de)serializers for record keys and for record values.
         streamsConfiguration.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
-        streamsConfiguration.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, "org.springframework.kafka.support.serializer.JsonSerde");
+        streamsConfiguration.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());//"org.springframework.kafka.support.serializer.JsonSerde");
         // Records should be flushed every 10 seconds. This is less than the default
         // in order to keep this example interactive.
         streamsConfiguration.put(StreamsConfig.COMMIT_INTERVAL_MS_CONFIG, 10 * 1000);

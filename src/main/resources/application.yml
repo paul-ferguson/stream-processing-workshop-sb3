@@ -1,0 +1,4 @@
+spring:
+  kafka:
+    streams:
+      applicationId: make-native-happy
