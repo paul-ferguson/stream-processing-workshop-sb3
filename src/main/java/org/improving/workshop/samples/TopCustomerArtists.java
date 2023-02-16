@@ -9,8 +9,10 @@ import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.Materialized;
 import org.apache.kafka.streams.kstream.Produced;
 import org.improving.workshop.KafkaConfig;
+import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.kafka.support.serializer.JsonSerde;
 
+import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -65,7 +67,7 @@ public class TopCustomerArtists {
 
     @Data
     @AllArgsConstructor
-    public static class SortedCounterMap {
+    public static class SortedCounterMap implements Serializable {
         private int maxSize;
         private LinkedHashMap<String, Long> map;
 

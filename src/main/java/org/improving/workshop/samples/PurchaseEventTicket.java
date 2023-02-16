@@ -11,8 +11,10 @@ import org.apache.kafka.streams.kstream.*;
 import org.improving.workshop.KafkaConfig;
 import org.msse.demo.mockdata.music.event.Event;
 import org.msse.demo.mockdata.music.ticket.Ticket;
+import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.kafka.support.serializer.JsonSerde;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 import static org.apache.kafka.streams.state.Stores.persistentKeyValueStore;
@@ -146,7 +148,7 @@ public class PurchaseEventTicket {
 
     @Data
     @AllArgsConstructor
-    public static class EventTicket {
+    public static class EventTicket implements Serializable {
         private Ticket ticket;
         private Event event;
     }
@@ -155,7 +157,7 @@ public class PurchaseEventTicket {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class EventTicketConfirmation {
+    public static class EventTicketConfirmation implements Serializable {
         private String confirmationStatus;
         private String confirmationId;
         private Ticket ticketRequest;
@@ -165,7 +167,7 @@ public class PurchaseEventTicket {
 
     @Data
     @AllArgsConstructor
-    public static class EventStatus {
+    public static class EventStatus implements Serializable {
         private boolean initialized;
         private Event event;
         private double totalRequested;

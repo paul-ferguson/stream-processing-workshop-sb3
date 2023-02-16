@@ -27,8 +27,7 @@ This then fixes some errors and allows Spring Boot manage the stream execution.
 Run the gradle task nativeCompile. This uses your JAVA_HOME to run the `gu` command so verify its set correctly.
 Once nativeCompile has completed it will generate an executable at build/native/nativeCompile/stream-processing-workshop-sb3.
 
-## Issues
-When streams needs to use the RocksDB it is not found in native.
+When streams needs to use the RocksDB it is not found in by default in the native executable.
 ```
 Caused by: java.lang.RuntimeException: librocksdbjni-osx.jnilib was not found inside JAR.
 	at org.rocksdb.NativeLibraryLoader.loadLibraryFromJarToTemp(NativeLibraryLoader.java:125) ~[na:na]
@@ -37,3 +36,13 @@ Caused by: java.lang.RuntimeException: librocksdbjni-osx.jnilib was not found in
 	at org.rocksdb.RocksDB.loadLibrary(RocksDB.java:68) ~[stream-processing-workshop-sb3:na]
 	at org.rocksdb.RocksDB.<clinit>(RocksDB.java:37) ~[stream-processing-workshop-sb3:na]
 ```
+I think this is a bug they are working on, but doing the following resolved the issue.
+* I needed to download the RockDB JNI library https://mvnrepository.com/artifact/org.rocksdb/rocksdbjni/7.1.2. 
+* Extract it `unzip rocksdbjni-7.1.2.jar`.
+* Then copy `librocksdbjni-osx.jnilib` into the same directory as the executable.
+* Then go into security and allow this file to be run. Adding execute permissions to this file might have done the trick too.
+
+I needed to create the RuntimeHints class to register the external and internal POJOs used for serialization and deserialization. 
+You could also add the RegisterReflectionForBinding annotation to the KafkaConfig class and list them all out there.
+There currently doesn't appear to be a way to put an annotation on the POJO itself.
+The POJOs also needed to be updated to implement Serializable.

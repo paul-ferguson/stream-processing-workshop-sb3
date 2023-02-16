@@ -12,6 +12,7 @@ import org.msse.demo.mockdata.music.stream.Stream;
 import org.msse.demo.mockdata.music.ticket.Ticket;
 import org.msse.demo.mockdata.music.venue.Venue;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ImportRuntimeHints;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafkaStreams;
@@ -29,6 +30,7 @@ import static org.apache.kafka.streams.StreamsConfig.*;
 @Configuration
 @EnableKafka
 @EnableKafkaStreams
+@ImportRuntimeHints(RuntimeHints.class)
 public class KafkaConfig {
 
     // addresses
