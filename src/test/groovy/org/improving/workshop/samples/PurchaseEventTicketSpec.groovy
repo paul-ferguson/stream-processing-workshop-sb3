@@ -6,14 +6,21 @@ import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.TestInputTopic
 import org.apache.kafka.streams.TestOutputTopic
 import org.apache.kafka.streams.TopologyTestDriver
-import org.improving.workshop.Streams
+import org.improving.workshop.KafkaConfig
 import org.msse.demo.mockdata.music.event.Event
 import org.msse.demo.mockdata.music.ticket.Ticket
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.kafka.config.KafkaStreamsConfiguration
 import spock.lang.Specification
 
 import static org.improving.workshop.utils.DataFaker.TICKETS
 
+@SpringBootTest
 class PurchaseEventTicketSpec extends Specification {
+    @Autowired
+    KafkaStreamsConfiguration kafkaStreamsConfiguration
+
     TopologyTestDriver driver
 
     // inputs
@@ -31,18 +38,18 @@ class PurchaseEventTicketSpec extends Specification {
         PurchaseEventTicket.configureTopology(streamsBuilder)
 
         // build the TopologyTestDriver
-        driver = new TopologyTestDriver(streamsBuilder.build(), Streams.buildProperties())
+        driver = new TopologyTestDriver(streamsBuilder.build(), kafkaStreamsConfiguration.asProperties())
 
         eventInputTopic = driver.createInputTopic(
-                Streams.TOPIC_DATA_DEMO_EVENTS,
+                KafkaConfig.TOPIC_DATA_DEMO_EVENTS,
                 Serdes.String().serializer(),
-                Streams.SERDE_EVENT_JSON.serializer()
+                KafkaConfig.SERDE_EVENT_JSON.serializer()
         )
 
         ticketInputTopic = driver.createInputTopic(
-                Streams.TOPIC_DATA_DEMO_TICKETS,
+                KafkaConfig.TOPIC_DATA_DEMO_TICKETS,
                 Serdes.String().serializer(),
-                Streams.SERDE_TICKET_JSON.serializer()
+                KafkaConfig.SERDE_TICKET_JSON.serializer()
         )
 
         outputTopic = driver.createOutputTopic(

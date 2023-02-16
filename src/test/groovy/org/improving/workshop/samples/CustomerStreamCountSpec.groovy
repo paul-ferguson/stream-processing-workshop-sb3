@@ -6,13 +6,20 @@ import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.TestInputTopic
 import org.apache.kafka.streams.TestOutputTopic
 import org.apache.kafka.streams.TopologyTestDriver
-import org.improving.workshop.Streams
+import org.improving.workshop.KafkaConfig
 import org.msse.demo.mockdata.music.stream.Stream
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.kafka.config.KafkaStreamsConfiguration
 import spock.lang.Specification
 
 import static org.improving.workshop.utils.DataFaker.STREAMS
 
+@SpringBootTest
 class CustomerStreamCountSpec extends Specification {
+    @Autowired
+    KafkaStreamsConfiguration kafkaStreamsConfiguration
+
     TopologyTestDriver driver
 
     // inputs
@@ -29,12 +36,12 @@ class CustomerStreamCountSpec extends Specification {
         CustomerStreamCount.configureTopology(streamsBuilder)
 
         // build the TopologyTestDriver
-        driver = new TopologyTestDriver(streamsBuilder.build(), Streams.buildProperties());
+        driver = new TopologyTestDriver(streamsBuilder.build(), kafkaStreamsConfiguration.asProperties());
 
         inputTopic = driver.createInputTopic(
-                Streams.TOPIC_DATA_DEMO_STREAMS,
+                KafkaConfig.TOPIC_DATA_DEMO_STREAMS,
                 Serdes.String().serializer(),
-                Streams.SERDE_STREAM_JSON.serializer()
+                KafkaConfig.SERDE_STREAM_JSON.serializer()
         )
 
         outputTopic = driver.createOutputTopic(

@@ -61,3 +61,8 @@ I needed to create the RuntimeHints class to register the external and internal 
 You could also add the RegisterReflectionForBinding annotation to the KafkaConfig class and list them all out there.
 There currently doesn't appear to be a way to put an annotation on the POJO itself.
 The POJOs also needed to be updated to implement Serializable.
+
+---
+
+The testImplementation classes needed to be updated to their newer version.
+The tests then needed to be updated to use the global KafkaStreamsConfiguration and SpringBootTest annotation.

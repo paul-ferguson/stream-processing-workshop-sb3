@@ -39,8 +39,11 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok:1.18.24'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
     testImplementation 'org.apache.kafka:kafka-streams-test-utils'
-    testImplementation 'org.spockframework:spock-core:2.3-groovy-3.0'
+    testImplementation "org.spockframework:spock-spring:2.4-M1-groovy-3.0"
+    testImplementation 'org.spockframework:spock-core:2.4-M1-groovy-3.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.codehaus.groovy:groovy-all:3.0.14'
+
 }
 
 test {
