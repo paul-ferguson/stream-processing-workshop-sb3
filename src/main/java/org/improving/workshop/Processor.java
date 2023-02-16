@@ -12,9 +12,9 @@ public class Processor {
 
     @Autowired
     public void process(StreamsBuilder builder) {
-        StreamTemplate.run(builder);
-        //CustomerStreamCount.run(builder);
-        //PurchaseEventTicket.run(builder);
-        //TopCustomerArtists.run(builder);
+        StreamTemplate.configureTopology(builder);
+        //CustomerStreamCount.configureTopology(builder);
+        //PurchaseEventTicket.configureTopology(builder);
+        //TopCustomerArtists.configureTopology(builder);
     }
 }

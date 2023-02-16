@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.kstream.*;
-import org.improving.workshop.Streams;
+import org.improving.workshop.KafkaConfig;
 import org.msse.demo.mockdata.music.event.Event;
 import org.msse.demo.mockdata.music.ticket.Ticket;
 import org.springframework.kafka.support.serializer.JsonSerde;
@@ -16,7 +16,6 @@ import org.springframework.kafka.support.serializer.JsonSerde;
 import java.util.UUID;
 
 import static org.apache.kafka.streams.state.Stores.persistentKeyValueStore;
-import static org.improving.workshop.Streams.*;
 
 @Slf4j
 public class PurchaseEventTicket {
@@ -26,33 +25,22 @@ public class PurchaseEventTicket {
     public static final JsonSerde<EventStatus> REMAINING_TICKETS_JSON_SERDE = new JsonSerde<>(EventStatus.class);
     public static final JsonSerde<PurchaseEventTicket.EventTicketConfirmation> TICKET_CONFIRMATION_JSON_SERDE = new JsonSerde<>(EventTicketConfirmation.class);
 
-    /**
-     * The Streams application as a whole can be launched like any normal Java application that has a `main()` method.
-     */
-    public static void run(StreamsBuilder builder) {
-        // configure the processing topology
-        configureTopology(builder);
-
-        // fire up the engines
-        startStreams(builder);
-    }
-
-    static void configureTopology(final StreamsBuilder builder) {
+    public static void configureTopology(final StreamsBuilder builder) {
         // store events in a table so that the ticket can reference them to find capacity
         KTable<String, Event> eventsTable = builder
                 .table(
-                        TOPIC_DATA_DEMO_EVENTS,
+                        KafkaConfig.TOPIC_DATA_DEMO_EVENTS,
                         Materialized
                             .<String, Event>as(persistentKeyValueStore("events"))
                             .withKeySerde(Serdes.String())
-                            .withValueSerde(Streams.SERDE_EVENT_JSON)
+                            .withValueSerde(KafkaConfig.SERDE_EVENT_JSON)
                 );
 
         // capture the backside of the table to log a confirmation that the Event was received
         eventsTable.toStream().peek((key, event) -> log.info("Event '{}' registered for artist '{}' at venue '{}' with a capacity of {}.", key, event.artistid(), event.venueid(), event.capacity()));
 
         builder
-            .stream(TOPIC_DATA_DEMO_TICKETS, Consumed.with(Serdes.String(), SERDE_TICKET_JSON))
+            .stream(KafkaConfig.TOPIC_DATA_DEMO_TICKETS, Consumed.with(Serdes.String(), KafkaConfig.SERDE_TICKET_JSON))
             .peek((ticketId, ticketRequest) -> log.info("Ticket Requested: {}", ticketRequest))
 
             // rekey by eventid so we can join against the event ktable

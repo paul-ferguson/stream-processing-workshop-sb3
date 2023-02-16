@@ -5,12 +5,9 @@ import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.Produced;
-import org.springframework.boot.SpringApplication;
 
-import static org.improving.workshop.Streams.TOPIC_DATA_DEMO_STREAMS;
-import static org.improving.workshop.Streams.startStreams;
+import static org.improving.workshop.KafkaConfig.TOPIC_DATA_DEMO_STREAMS;
 
-// No application context available after calling main method of 'org.improving.workshop.StreamTemplate'. Does it run a SpringApplication?
 @Slf4j
 public class StreamTemplate {
     // Reference TOPIC_DATA_DEMO_* properties in Streams
@@ -21,15 +18,7 @@ public class StreamTemplate {
     /**
      * The Streams application as a whole can be launched like any normal Java application that has a `main()` method.
      */
-    public static void run(StreamsBuilder builder) {
-        // configure the processing topology
-        configureTopology(builder);
-
-        // fire up the engines
-        startStreams(builder);
-    }
-
-    static void configureTopology(final StreamsBuilder builder) {
+    public static void configureTopology(StreamsBuilder builder) {
         builder
             .stream(INPUT_TOPIC, Consumed.with(Serdes.String(), Serdes.String()))
             .peek((key, value) -> log.info("Event Received: {},{}", key, value))
